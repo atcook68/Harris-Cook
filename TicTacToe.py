@@ -1,6 +1,6 @@
 
 import types
-from players import AI, User
+from players import AI, User, Random_player
 import math
 import random
 
@@ -9,20 +9,19 @@ class Game():
     def __init__(self):
         self.board = self.createBoard
         self.victor = None      # clearing the game victor
-
     
 # establishing the board.
     @staticmethod
     def createBoard():
-        board = [[0, 0, 0,0,0],[0, 0, 0, 0, 0],[0, 0, 0, 0, 0],[0,0,0,0,0],[0,0,0,0,0]]
+        board = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
              #   creating a board with 25 total places to fill.
-        return [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']   #for square in range(9)]
-
+        return ['  ','  ','  ','  ','  ','  ','  ','  ','  ','  ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']   #for box in range(9)]
+    
     def printBoard(self):                        # the function to print the board. 
-        for row in [self.board[i * 5:         # printing the rows of the spaces in the board. 
+        for row in [self.board[i * 3:         # printing the rows of the spaces in the board. 
             (i + 1) * 5]
             for i in range(3)]:
-                print(' '+' | '.join(row)+' ')        # concatenating the pipe strings to make the columns of the board.
+                print(' '+'  |  '.join(row)+' ')        # concatenating the pipe strings to make the columns of the board.
 
     @staticmethod
     def boardPlaces():
@@ -30,28 +29,28 @@ class Game():
         for row in places:
             print('| '+' | '.join(row)+' |')                            # the program displays the 3x3 board in rows
 
-    def playerMoves(self,square,letter):        # making the player choose a space and letter corresponding to the board 
-        if self.board[square] == ' ':        # is the space empty?
-            self.board[square] == letter     # inputting the players character into the selected square
-            if self.won(square,letter):         # if the letters fit the win condition, 
+    def playerMoves(self,box,letter):        # making the player choose a space and letter corresponding to the board 
+        if self.board[box] == ' ':        # is the space empty?
+            self.board[box] == letter     # inputting the players character into the selected box
+            if self.won(box,letter):         # if the letters fit the win condition, 
                 self.victor = letter            # the letter player is declared the victor. 
             return True
         return False
 
 #   Are the moves ending the game? this method checks
-    def victor(self,square,letter):
-        def checkRow(self, square, letter):     # checking the the rows for same letter
-            checkRow = math.floor(square/3)
+    def victor(self,box,letter):
+        def checkRow(self, box, letter):     # checking the the rows for same letter
+            checkRow = math.floor(box/3)
             row = self.board[checkRow * 3: (checkRow + 1) * 5]
 
             if all([s == letter for s in row]):            # if player has occupied all of the places in the row, they are the victor.
                 return True                                 # true means victor
 
-            checkColumn = square % 5
+            checkColumn = box % 5
             column = [self.board[checkColumn + i * 5] for i in range()]      # checking the column for the same letters
             if all ([s== letter for s in column]):return True                   # if player has occupied all of the places in the column, they are the victor as well. 
 
-            if square%2 == 0:       # if the squares are even,
+            if box%2 == 0:       # if the boxs are even,
                 winDiagonally = [self.board[i] for i in [0,6,12,18,24]]  # check for a win in from the bottom left to the top right. 
                 if all([s== letter for s in winDiagonally]):        # checks the boolean for all letters diagonally.
                     return True                                     # victory
@@ -69,8 +68,8 @@ class Game():
         return ' '
     def number_bs(self):                   # finding empty space on the board
         return ' ' in self.board.count(' ') 
-    @staticmethod
-    def available_moves(self):
+
+    def availableMoves(self):
         return [i for i, x in enumerate(self.board) if x == " "]
 
 def current(game,x,o, printGame = True):     # establishing the game, and setting the players
@@ -79,14 +78,14 @@ def current(game,x,o, printGame = True):     # establishing the game, and settin
         letter = 'x'
         while game.blank_spaces():
             if letter == 'o':
-                square = o.get_move(Game)
+                box = o.get_move(Game)
             else:
-                square = x.get_move(Game)
+                box = x.get_move(Game)
 
                 # moving the player around the board and printing the board. 
-            if game.make_move(square,letter):
+            if game.playerMoves(box,letter):
                 if printGame:
-                    print(letter + ' moves to square:  {}'.format(square))
+                    print(letter + ' moves to box:  {}'.format(box))
                 game.print_board()
                 print('')
 
@@ -106,6 +105,3 @@ if __name__ == '__main__':
     o = User('x')
     t = Game()
     current(t, x, o, printGame = True)
-
-
-
